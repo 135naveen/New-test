@@ -5,7 +5,7 @@ let winCount = 0;
 let lossCount = 0;
 let storedHistory = JSON.parse(localStorage.getItem("gameHistory")) || [];
 
-// ✅ Fetch Current Game Issue
+// ✅ Function to Fetch Game Issue
 async function fetchCurrentGameIssue() {
     const apiUrl = 'https://api.bdg88zf.com/api/webapi/GetGameIssue';
     const requestData = {
@@ -29,6 +29,8 @@ async function fetchCurrentGameIssue() {
                 latestPeriod = data.data.issueNumber;
                 document.getElementById('period-number').textContent = latestPeriod;
                 fetchPreviousResults();
+            } else {
+                console.error("❌ API Error:", data.message);
             }
         }
     } catch (error) {
@@ -36,7 +38,7 @@ async function fetchCurrentGameIssue() {
     }
 }
 
-// ✅ Fetch Previous Results
+// ✅ Function to Fetch Previous Results
 async function fetchPreviousResults() {
     const apiUrl = 'https://api.bdg88zf.com/api/webapi/GetNoaverageEmerdList';
     const requestData = {
@@ -61,6 +63,8 @@ async function fetchPreviousResults() {
             if (data.code === 0 && data.data.list.length > 0) {
                 previousResults = data.data.list;
                 updateResults();
+            } else {
+                console.error("❌ API Error: No results found.");
             }
         }
     } catch (error) {
@@ -68,17 +72,22 @@ async function fetchPreviousResults() {
     }
 }
 
-// ✅ Update Results
+// ✅ Function to Update Results
 function updateResults() {
     if (previousResults.length > 0) {
         latestResult = previousResults[0].number <= 4 ? 'SMALL' : 'BIG';
-        document.getElementById('predicted-result').textContent = latestResult;
-        document.getElementById('predicted-result').className = latestResult === 'SMALL' ? 'text-blue-500 font-bold' : 'text-red-500 font-bold';
+        const predictedElement = document.getElementById('predicted-result');
+        
+        predictedElement.textContent = latestResult;
+        predictedElement.className = latestResult === 'SMALL' ? 'text-blue-500 font-bold' : 'text-red-500 font-bold';
+
         updateHistory();
+    } else {
+        console.warn("⚠ No results found for prediction.");
     }
 }
 
-// ✅ Update History & Win/Loss Count
+// ✅ Function to Update History
 function updateHistory() {
     const historyContainer = document.getElementById('history-list');
     historyContainer.innerHTML = '';
@@ -93,7 +102,7 @@ function updateHistory() {
 
     // Store New Entry
     storedHistory.unshift({
-        period: latestPeriod.toString().slice(-4),
+        period: latestPeriod ? latestPeriod.toString().slice(-4) : "N/A",
         prediction: latestResult,
         status: status
     });
