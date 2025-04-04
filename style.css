@@ -1,0 +1,47 @@
+/* Win & Loss Styles */
+.win {
+    color: #10b981;  /* Green for Win */
+    font-weight: bold;
+    animation: glow 1.5s infinite alternate;
+    text-shadow: 0px 0px 10px rgba(16, 185, 129, 0.8);
+}
+
+.loss {
+    color: #ef4444;  /* Red for Loss */
+    font-weight: bold;
+    animation: shake 0.5s infinite alternate;
+    text-shadow: 0px 0px 10px rgba(239, 68, 68, 0.8);
+}
+
+.pending {
+    color: #f59e0b;  /* Yellow for Pending */
+    font-weight: bold;
+    animation: pulse 1s infinite alternate;
+}
+
+/* Animations */
+@keyframes glow {
+    from {
+        text-shadow: 0px 0px 5px rgba(16, 185, 129, 0.5);
+    }
+    to {
+        text-shadow: 0px 0px 20px rgba(16, 185, 129, 1);
+    }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(2px); }
+}
+
+@keyframes pulse {
+    from {
+        opacity: 0.6;
+    }
+    to {
+        opacity: 1;
+    }
+}
